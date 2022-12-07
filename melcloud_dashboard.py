@@ -11,8 +11,8 @@ from datetime import timedelta
 from datetime import datetime
 
 # df = pd.read_csv('https://raw.githubusercontent.com/plotly/datasets/master/gapminderDataFiveYear.csv')
-# df = pd.read_csv('./CSVReport_short.csv')
-
+# df = pd.read_csv('./CSVReport_7Dec_short.csv')
+#
 login_url = "https://app.melcloud.com/Mitsubishi.Wifi.Client/Login/ClientLogin"
 username = os.environ.get("MEL_USERNAME")
 password = os.environ.get("MEL_PASSWORD")
@@ -47,7 +47,7 @@ print(f"Getting data from MELCloud...")
 response_get_data = s.get(get_data_url)
 print(f"Processing data...")
 df = pd.read_csv(BytesIO(response_get_data.content))
-df["date"] = pd.to_datetime(df["TimeStamp"])
+df["date"] = pd.to_datetime(df["TimeStamp"], format='%d/%m/%Y %H:%M')
 df["year"] = df["date"].dt.year
 df = df[
     [
@@ -91,7 +91,7 @@ app.layout = html.Div(
     Input("my-date-picker-range", "end_date"),
 )
 def update_output(start_date, end_date):
-    mask = (df_melted["date"] > start_date) & (df_melted["date"] <= end_date)
+    mask = (df_melted["date"] > datetime.strptime(start_date, '%Y-%m-%d')) & (df_melted["date"] <= datetime.strptime(end_date,'%Y-%m-%d'))
     filtered_df = df_melted.loc[mask]
     fig = px.line(filtered_df, x="date", y="temp", color="measurement")
     fig.update_layout(transition_duration=500)
