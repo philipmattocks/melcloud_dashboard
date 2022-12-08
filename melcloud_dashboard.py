@@ -12,7 +12,7 @@ from datetime import datetime
 
 # df = pd.read_csv('https://raw.githubusercontent.com/plotly/datasets/master/gapminderDataFiveYear.csv')
 # df = pd.read_csv('./CSVReport_7Dec_short.csv')
-#
+
 login_url = "https://app.melcloud.com/Mitsubishi.Wifi.Client/Login/ClientLogin"
 username = os.environ.get("MEL_USERNAME")
 password = os.environ.get("MEL_PASSWORD")
@@ -79,6 +79,8 @@ app.layout = html.Div(
         dcc.Graph(id="graph"),
         html.H1(id="output-container-date-picker-range"),
         html.H1(id="output-energy"),
+        html.H1(id="total-consumed"),
+        html.H1(id="total-produced"),
     ]
 )
 
@@ -86,6 +88,8 @@ app.layout = html.Div(
 @app.callback(
     Output("output-container-date-picker-range", "children"),
     Output("output-energy", "children"),
+    Output("total-consumed", "children"),
+    Output("total-produced", "children"),
     Output("graph", "figure"),
     Input("my-date-picker-range", "start_date"),
     Input("my-date-picker-range", "end_date"),
@@ -109,7 +113,9 @@ def update_output(start_date, end_date):
     ]["temp"].sum()
     return (
         f"mean outside temp: {mean_outside_temp}",
-        f"EnergyConsumed/EnergyProduced: {round(total_energy_produced/total_energy_consumed, 2)}",
+        f"POC: {round(total_energy_produced/total_energy_consumed, 2)}",
+        f"Total Energy Produced: {total_energy_produced}",
+        f"Total Energy Consumed: {total_energy_consumed}",
         fig,
     )
 
