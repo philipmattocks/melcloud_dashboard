@@ -77,10 +77,10 @@ app.layout = html.Div(
             # end_date=max(df['date'])
         ),
         dcc.Graph(id="graph"),
-        html.H1(id="output-container-date-picker-range"),
-        html.H1(id="output-energy"),
-        html.H1(id="total-consumed"),
-        html.H1(id="total-produced"),
+        html.H3(id="output-container-date-picker-range"),
+        html.H3(id="output-energy"),
+        html.H3(id="total-consumed"),
+        html.H3(id="total-produced"),
     ]
 )
 
